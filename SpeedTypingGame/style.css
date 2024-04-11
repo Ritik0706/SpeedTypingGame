@@ -1,0 +1,358 @@
+/* Background Image */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-x: hidden;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('bg-img.gif');
+    background-size: cover; /* or contain depending on what you need */
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.5; /* Adjust the opacity as needed, 0.1 for minimum opacity */
+    z-index: -1; /* Ensure the background is behind content */
+}
+
+
+.typed-word {
+	padding: 5px;
+	display: inline-block;
+}
+.hide {
+	display: none;
+}
+#text-display {
+	font-size: 3rem;
+	text-align: center;
+	color: #fff;
+}
+button {
+	background-color: rgb(43, 72, 201);
+	color: white;
+	cursor: pointer;
+	padding: 15px;
+	font-size: large;
+	border: none;
+	border-radius: 15px;
+	outline: none;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+    margin-bottom: 25px;
+}
+input {
+	font-size: 1.5rem;
+	display: block;
+	width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	color: #fff;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+::placeholder{
+	color: #fff;
+}
+#main-heading {
+	text-align: center;
+}
+.d-block {
+	display: block;
+}
+#stats {
+	margin-left: auto;
+	margin-right: auto;
+	width: fit-content;
+}
+#btn-highscore {
+	margin-top: 10px;
+	text-decoration: none;
+}
+
+/* Container Styles */
+.container {
+	max-width: 800px;
+	margin: 10px auto;
+	padding: 20px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 2px solid #fff;
+}
+/* Header Styles */
+header {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* Main Heading */
+#main-heading {
+    display: inline-block;
+    padding: 10px;
+	color: #fff;
+    white-space: nowrap; /* Keep the text in a single line */
+    position: relative;
+}
+
+		
+/* Stats Styles */
+#stats {
+	display: flex;
+	justify-content: space-around;
+	border-radius: 8px;
+	padding: 20px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	border: 2px solid #fff;
+}
+		
+#stats div {
+	margin-right: 40px;
+}
+		
+#stats p {
+	margin: 10px 0;
+	font-size: 1.2rem;
+	color: #fff;
+}
+		
+#stats span {
+	font-weight: bold;
+	color: #fff;
+}
+		
+/* Main Section Styles */
+#main-section {
+	border-radius: 15px;
+	padding: 20px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	border: 2px solid #fff;
+}
+		
+/* Typed Words Styles */
+.typed-word {
+	padding: 4px 8px;
+	border-radius: 4px;
+	margin: 4px;
+}
+		
+.typed-word.greenyellow {
+	background-color: #d4edda;
+}
+		
+.typed-word.red {
+	background-color: #f8d7da;
+}
+		
+/* Start Game Button Styles */
+#button {
+	display: block;
+	margin: 0 auto;
+	padding: 10px 20px;
+	font-size: 1rem;
+	margin-top: 25px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+		
+#button:hover {
+	background-color: #0056b3;
+}
+		
+/* Input Field Styles */
+#input {
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1rem;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+}
+		
+/* High Score Button Styles */
+#btn-highscore {
+	display: block;
+	margin: 0 auto;
+	margin-top: 10px;
+	text-decoration: none;
+}
+		
+#btn-highscore button {
+	padding: 10px 20px;
+	font-size: 1rem;
+	background-color: #28a745;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+		
+#btn-highscore button:hover {
+	background-color: #218838;
+}
+
+
+
+
+/* POPUP */
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 2; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	display: flex;
+	align-items: center; /* Align vertically */
+	justify-content: center; /* Align horizontally */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+	background-color: #fefefe;
+	margin: 2% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%; /* Could be more or less, depending on screen size */
+	max-width: 600px; /* Maximum width */
+	text-align: center;
+  }
+  
+  /* The Close Button */
+  .close-button {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+  }
+  
+  .close-button:hover,
+  .close-button:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+  }  
+  
+  #viewHighScores {
+	background-color: #4CAF50;
+	color: white;
+	padding: 14px 20px;
+	margin: 10px 0;
+	border: none;
+	cursor: pointer;
+	width: 100%;
+  }
+  
+  h4 {
+	font-size: 5em;
+	font-family: serif;
+	color: transparent;
+	text-align: center;
+	animation: effect 2s linear infinite;
+}
+
+@keyframes effect {
+	0% {
+		background: linear-gradient(#008000, #00FF00);
+		-webkit-background-clip: text;
+	}
+
+	100% {
+		background: linear-gradient(#3CE7D7, #000FFF);
+		-webkit-background-clip: text;
+	}
+}
+ 
+
+   
+
+  /* Basic styles for the footer */
+.fixed-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 100;
+    opacity: 0.9;
+    transition: background-color 0.5s ease-in-out;
+}
+
+.fixed-footer:hover {
+    background-color: #555; /* Darken footer on hover */
+}
+
+.footer-text {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    animation: fadeIn 2s;
+}
+
+/* .moving-text {
+	color: white;
+    max-width: 600px; 
+} */
+
+marquee {
+	display: inline-block;
+    padding: 8px;
+	font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5); 
+	width: 100%;
+	color: #fff;	
+	position: fixed;
+	bottom: 60px; 
+}
+
+
+/* Keyframes for animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .fixed-footer {
+        padding: 5px 0;
+    }
+    .footer-text {
+        font-size: 14px;
+    }
+}
+
+@keyframes moveText {
+    0% {
+        transform: translateX(-100%); /* Start from the left side of the viewport */
+    }
+    100% {
+        transform: translateX(100vw); /* Move to the right side of the viewport */
+    }
+}

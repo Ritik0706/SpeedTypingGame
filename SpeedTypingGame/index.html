@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Typing Game</title>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container" id="gamepage">
+			<header>
+				<h1 id="main-heading" class="mb-4">Speed Typing Game...</h1>
+				<div id="stats" class="hide mb-4">
+					<div>
+						<p>WPM: <span id="wpm-display"></span></p>
+					</div>
+					<div>
+						<p>Score: <span id="score-display"></span></p>
+					</div>
+					<div>
+						<p>Time left: <span id="time-display"></span></p>
+					</div>
+				</div>
+			</header>
+			<div class="form-group">
+				<input type="text" id="playerName" placeholder="Player Name" />
+			</div>
+			<section id="main-section" class="p-4 rounded shadow">
+				<article id="main-content"></article>
+
+				<button
+					type="submit"
+					id="button"
+					class="btn btn-primary btn-lg btn-block mb-3"
+				>
+					Start game
+				</button>
+				<article id="text-display"></article>
+
+				<form id="form">
+					<input
+						id="input"
+						type="text"
+						class="hide"
+						placeholder="Type here..."
+					/>
+				</form>
+				<a
+					id="btn-highscore"
+					href="./highscores.html"
+					class="d-block text-center mb-3"
+				>
+					<button class="btn btn-success btn-lg" id="button">
+						High scores
+					</button>
+				</a>
+			</section>
+		</div>
+
+		<!-- Modal Structure -->
+		<div id="gameOverModal" class="modal">
+			<div class="modal-content">
+				<span class="close-button">&times;</span>
+				<img
+					src="bloody-keyboard.gif"
+					alt="Game Over"
+					class="game-over-image"
+				/>
+				<h4>Game Over...</h4>
+				<p id="finalScore"></p>
+				<button id="viewHighScores">See Your HighSore</button>
+			</div>
+		</div>
+
+		<marquee direction="right"
+			>Test your typing speed with Speed Typing Game.</marquee
+		>
+		<!-- Footer -->
+		<footer class="fixed-footer">
+			<p class="footer-text">© 2024 Speed Typing Game. All rights reserved.</p>
+		</footer>
+
+		<script src="script.js"></script>
+
+		<script>
+			// create a speed typing game
+
+			const startGameButton = document.getElementById('button');
+			const highScoreButton = document.getElementById('btn-highscore');
+			const input = document.getElementById('input');
+			const mainContent = document.getElementById('main-content');
+			const statContent = document.getElementById('stats');
+			const textDisplay = document.getElementById('text-display');
+			const wpmDisplay = document.getElementById('wpm-display');
+			const scoreDisplay = document.getElementById('score-display');
+			const timeDisplay = document.getElementById('time-display');
+			const form = document.getElementById('form');
+			const splittedAlice = alice.split(' ');
+
+			const state = {
+				currentWord: '',
+				score: 0,
+				timeElapsed: 0,
+				gameLength: 60, // 30 sec
+			};
+
+			document.getElementById('gameOverModal').style.display = 'none';
+
+			/**
+			 * Get a random word from Alice
+			 */
+			function getRandomWord() {
+				return splittedAlice[Math.floor(Math.random() * splittedAlice.length)];
+			}
+
+			function renderStats() {
+				timeDisplay.textContent = state.gameLength - state.timeElapsed;
+				scoreDisplay.textContent = state.score;
+				wpmDisplay.textContent = calcWpm().toFixed(2);
+			}
+
+			function nextWord() {
+				const word = getRandomWord();
+				textDisplay.textContent = word;
+				state.currentWord = word;
+			}
+
+			function calcWpm() {
+				return Number(state.score / (state.timeElapsed / 60));
+			}
+
+			function createWordSpan(color, content) {
+				const span = document.createElement('span');
+				// add colour to it: defining the styles
+				const style = 'background-color: ' + color;
+				span.setAttribute('style', style);
+				span.className = 'typed-word';
+
+				span.textContent = content;
+				return span;
+			}
+
+			form.addEventListener('submit', function (event) {
+				event.preventDefault();
+				// get input value
+				const userInput = input.value;
+
+				// if no input dont do anything
+				if (userInput === '') {
+					return;
+				}
+
+				// check user entered the correct input
+				const isCorrect = userInput === state.currentWord;
+
+				// give it the appropriate color
+				let span;
+				if (isCorrect) {
+					// if correct, add the word to the list with green background
+					span = createWordSpan('greenyellow', userInput);
+					state.score += 1;
+				} else {
+					// if incorrect, add the word to the list with red background
+					span = createWordSpan('red', userInput);
+				}
+
+				mainContent.appendChild(span);
+
+				// finally we clear the text input
+				input.value = '';
+
+				// show next word and render stat
+				nextWord();
+				renderStats();
+			});
+
+			function startClock() {
+				// add 1 sec per running sec
+				setInterval(function () {
+					state.timeElapsed += 1;
+					renderStats();
+
+					// end the game
+					// End the game
+					if (state.timeElapsed === state.gameLength) {
+						const scores = JSON.parse(localStorage.getItem('highscores')) || [];
+
+						const scoreEntry = {
+							name: state.playerName,
+							score: wpmDisplay.textContent,
+						};
+
+						scores.push(scoreEntry);
+						scores.sort(); // Consider improving sorting to ensure high scores are sorted correctly
+
+						if (scores.length > 10) {
+							scores.shift(); // Keep only top 10 scores
+						}
+
+						localStorage.setItem('highscores', JSON.stringify(scores));
+
+						// Show the game over modal
+						const finalScoreElement = document.getElementById('finalScore');
+						finalScoreElement.textContent =
+							'Your WPM is : ' + wpmDisplay.textContent;
+						finalScoreElement.style.fontSize = '20px'; // Example CSS
+						finalScoreElement.style.color = '#007bff'; // Example CSS
+						// Add any other CSS properties as needed
+
+						document.getElementById('gameOverModal').style.display = 'block';
+					}
+				}, 1000);
+			}
+
+			// Modal close and redirect logic
+			document
+				.querySelector('.close-button')
+				.addEventListener('click', function () {
+					document.getElementById('gameOverModal').style.display = 'none';
+					window.location.href = 'highscores.html'; // Redirect to the highscore page
+				});
+
+			document
+				.getElementById('viewHighScores')
+				.addEventListener('click', function () {
+					window.location.href = 'highscores.html'; // Redirect to the highscore page
+				});
+
+			startGameButton.addEventListener('click', function (event) {
+				const playerName = document.getElementById('playerName').value.trim();
+
+				// Check if player name is entered
+				if (!playerName) {
+					alert('Please enter Player Name.');
+					return;
+				}
+
+				// Store player name in state
+				state.playerName = playerName;
+
+				// hide the start game button
+				startGameButton.className = 'hide';
+				// show the input field
+				input.className = '';
+				// show the stat
+				statContent.className = '';
+				// hide the high score button;
+				highScoreButton.className = 'hide';
+
+				// focus cursor on the text field so user can type right away
+				input.focus();
+				// show the word
+				nextWord();
+
+				startClock();
+			});
+		</script>
+	</body>
+</html>
